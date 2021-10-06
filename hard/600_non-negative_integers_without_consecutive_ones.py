@@ -48,7 +48,8 @@ class Solution:
 
 
 demo = Solution()
-# print(demo.findIntegers(52))
+# print(demo.findIntegers(4514852))
+print(demo.findIntegers(52))
 print(demo.findIntegers(3))
 print(demo.findIntegers(1))
-print(demo.findIntegers(5))
+print(demo.findIntegers(10))

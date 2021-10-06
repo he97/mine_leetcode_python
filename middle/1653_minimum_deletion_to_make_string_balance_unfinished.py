@@ -13,43 +13,39 @@ from typing import List
 # 学习动态规划再来吧
 class Solution:
     def minimumDeletions(self, s: str) -> int:
-        a_list_indexes = []
-        b_list_indexes = []
-        index = 0
-        for index in range(0, len(s)):
-            if s[index] == 'b':
-                break
-        while index < len(s):
-            if s[index] == 'b':
-                b_list_indexes.append(index)
-            else:
-                a_list_indexes.append(index)
-            index += 1
-        if 0 == len(a_list_indexes) or len(b_list_indexes) == 0:
-            return 0
+        l = list(s)
+        dp = [0] * len(l)
+        illegal_b = 0
+        tag_a = tag_b = False
+        for i in range(len(l)):
+            if i == 0:
+                if l[i] == 'a':
+                    dp[0] = 0
+                    tag_a = True
+                else:
+                    dp[0] = 0
+                    tag_b = True
+            if l[i] == 'a':
+                if not tag_a:
+                    tag_a = True
+                if not tag_b:
+                    dp[i] = dp[i-1]
+                else:
+                    if dp[i-1]+1 < illegal_b:
+                        dp[i] = dp[i - 1] + 1
+                    else:
+                        dp[i] = illegal_b
+            elif l[i] == 'b':
+                if not tag_a:
+                    dp[i] = dp[i-1]
+                illegal_b += 1
+                if not tag_b:
+                    tag_b = True
+                dp[i] = dp[i-1]
+        return dp[-1]
 
-        max_delete = len(a_list_indexes) if len(a_list_indexes) < len(b_list_indexes) else len(b_list_indexes)
-        # 逆转一下数组，反着的计算有些折磨
-        a_list_indexes.reverse()
-        # i:会删除多少个数字
-        for i in range(1, max_delete):
-            if self.delete_num_and_check(a_list_indexes=a_list_indexes,
-                                         b_list_indexes=b_list_indexes,
-                                         delete_num=i):
-                return i
-        return max_delete
 
-    #     如果对某个数目
-    def delete_num_and_check(self,
-                             delete_num: int,
-                             a_list_indexes: List[int],
-                             b_list_indexes: List[int]) -> bool:
-        for i in range(0, delete_num):
-            # 判断a的最大的索引与b的最小的索引的位置
-            if a_list_indexes[i] < b_list_indexes[delete_num - i]:
-                # a_list_indexes.reverse()
-                return True
-        return False
+
 
 
 demo = Solution()
