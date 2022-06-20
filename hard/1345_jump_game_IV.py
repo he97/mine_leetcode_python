@@ -56,6 +56,7 @@ class Solution:
         # d2 = defaultdict(list)
         d2 = defaultdict(list)
         d3 = {}
+        steps = [-1] * len(arr)
 
         for k in set(arr):
             d[k] = False
